@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.home-bg {
+    background-image: url('images/agriculture-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(76, 175, 80, 0.9);
+    padding: 15px 20px;
+}
+
+nav h1 {
+    color: white;
+    font-size: 1.5em;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+section {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-top: 10px;
+}
+
+input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+p {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* Home Page Welcome Section */
+.welcome {
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+}
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(76, 175, 80, 0.9);
+            padding: 15px 20px;
+        }
+
+        nav h1 {
+            color: white;
+            font-size: 1.5em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #cropResult {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1><a href="home.html" style="color: white; text-decoration: none; cursor: pointer;">AgriCare</a></h1>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="fertilizer-recommendation.html">Fertilizer Recommendation</a></li>
+            <li><a href="disease-detection.html">Disease Detection</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Crop Recommendation</h2>
+        <form id="cropForm" method="POST" action="/recommend-crop">
+            <label for="N">Nitrogen (N):</label>
+            <input type="number" id="N" name="N" required>
+
+            <label for="P">Phosphorus (P):</label>
+            <input type="number" id="P" name="P" required>
+
+            <label for="K">Potassium (K):</label>
+            <input type="number" id="K" name="K" required>
+
+            <label for="temperature">Temperature (°C):</label>
+            <input type="number" id="temperature" name="temperature" required step="0.1">
+
+            <label for="humidity">Humidity (%):</label>
+            <input type="number" id="humidity" name="humidity" required step="0.1">
+
+            <label for="ph">Soil pH:</label>
+            <input type="number" id="ph" name="ph" required step="0.1">
+
+            <label for="rainfall">Rainfall (mm):</label>
+            <input type="number" id="rainfall" name="rainfall" required step="0.1">
+
+            <button type="button" onclick="recommendCrop()">Get Crop Recommendation</button>
+        </form>
+        <div id="cropResult"></div>
+    </section>
+
+    <script>
+        function recommendCrop() {
+    const form = document.getElementById('cropForm');
+    const formData = new FormData(form);
+
+    fetch('http://127.0.0.1:5000/recommend-crop', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Display the recommendation
+        const resultDiv = document.getElementById('cropResult');
+        resultDiv.innerHTML = `
+            <div style="margin-top: 20px; padding: 15px; background-color: #e7ffe7; border: 1px solid #4caf50; border-radius: 5px;">
+                <h3 style="color: #4caf50;">Recommended Crop:</h3>
+                <p style="font-size: 1.2em; font-weight: bold;">${data['Recommended Crop']}</p>
+            </div>
+        `;
+
+        // Clear the form
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the recommendation.');
+    });
+}
+
+    </script>
+</body>
+</html>

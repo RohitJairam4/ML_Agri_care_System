@@ -1,0 +1,292 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disease Detection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .home-bg {
+            background-image: url('images/agriculture-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(76, 175, 80, 0.9);
+            padding: 15px 20px;
+        }
+
+        nav h1 {
+            color: white;
+            font-size: 1.5em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            margin-top: 10px;
+            font-size: 1.1em;
+            color: #333;
+        }
+        #diseaseForm{
+            display: flex;
+                
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .file-upload-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #uploadedImage {
+            display: none;
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
+        }
+
+        .loading img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 8px;
+            display: none;
+            text-align: justify;
+            text-align-last: center;
+        }
+
+        .result h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+        }
+
+        .result p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .result img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .result a {
+            display: inline-block;
+            margin-top: 10px;
+            font-size: 1em;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .result a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <h1><a href="home.html" style="color: white; text-decoration: none; cursor: pointer;">AgriCare</a></h1>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="crop-recommendation.html">Crop Recommendation</a></li>
+            <li><a href="fertilizer-recommendation.html">Fertilizer Recommendation</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Plant Disease Detection</h2>
+        <form id="diseaseForm">
+            <label for="image">Upload Plant Leaf Image:</label>
+            <div class="file-upload-wrapper">
+                <div>
+                    <input type="file" id="image" name="image" accept="image/*" required>
+                    <br>
+                    <button type="submit">Detect Disease</button>
+            </div>
+                
+                <div id="uploadedImage" class="file-upload-wrapper">
+                    <h3>Uploaded Image:</h3>
+                    <img id="imagePreview" alt="Uploaded Plant Image"/>
+                </div>
+            </div>
+            
+        </form>
+
+        <div id="loading" class="loading">
+            <p>Loading...</p>
+            <img src="https://i.gifer.com/VAyR.gif" alt="Loading"> <!-- Replace with your loading GIF -->
+        </div>
+
+        
+
+        <div id="diseaseResult" class="result">
+            <h3 id="diseaseName"></h3>
+            <p id="diseaseDescription"></p>
+            <h4>Prevention Steps:</h4>
+            <p id="preventionSteps"></p>
+            <h4>Supplement:</h4>
+            <p id="supplementName"></p>
+            <a id="supplementLink" href="" target="_blank">Buy Here</a>
+            <div>
+                <img id="diseaseImage" alt="Disease Image">
+                <img id="supplementImage" alt="Supplement Image">
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('diseaseForm').addEventListener('submit', async function (e) {
+            e.preventDefault(); // Prevent form from submitting the traditional way
+
+            // Show loading animation
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('diseaseResult').style.display = 'none';
+
+            const formData = new FormData();
+            const fileInput = document.getElementById('image');
+            formData.append('image', fileInput.files[0]);
+
+            // Display uploaded image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('uploadedImage').style.display = 'block';
+                document.getElementById('imagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (response.ok) {
+                    // Hide loading animation
+                    document.getElementById('loading').style.display = 'none';
+
+                    // Display the result
+                    document.getElementById('diseaseResult').style.display = 'block';
+                    document.getElementById('diseaseName').innerText = result.disease_name;
+                    document.getElementById('diseaseDescription').innerText = result.description;
+                    document.getElementById('preventionSteps').innerText = result.prevention_steps;
+                    document.getElementById('supplementName').innerText = result.supplement_name;
+                    document.getElementById('supplementLink').href = result.supplement_buy_link;
+                    document.getElementById('diseaseImage').src = result.image_url;
+                    document.getElementById('supplementImage').src = result.supplement_image_url;
+                } else {
+                    alert(result.error || 'Something went wrong!');
+                }
+            } catch (error) {
+                console.error('Error during disease detection:', error);
+                alert('Error during disease detection.');
+
+                // Hide loading animation on error
+                document.getElementById('loading').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

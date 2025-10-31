@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fertilizer Recommendation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(76, 175, 80, 0.9);
+            padding: 15px 20px;
+        }
+
+        nav h1 {
+            color: white;
+            font-size: 1.5em;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-height: 80vh;
+        }
+
+        label {
+            margin-top: 10px;
+        }
+
+        input {
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <h1><a href="home.html" style="color: white; text-decoration: none; cursor: pointer;">AgriCare</a></h1>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="crop-recommendation.html">Crop Recommendation</a></li>
+            <li><a href="disease-detection.html">Disease Detection</a></li>
+        </ul>
+    </nav>
+
+    <section>
+        <h2>Fertilizer Recommendation</h2>
+        <div id="fertilizerResult"></div>
+
+        <form id="fertilizerForm">
+            <label for="temperature">Temperature (°C):</label>
+            <input type="number" id="temperature" name="temperature" required>
+
+            <label for="humidity">Humidity (%):</label>
+            <input type="number" id="humidity" name="humidity" required>
+
+            <label for="moisture">Soil Moisture (%):</label>
+            <input type="number" id="moisture" name="moisture" required>
+
+            <label for="soilType">Soil Type (Enter 1 or 2):</label>
+            <input type="number" id="soilType" name="soil_type" required>
+            
+            <label for="cropType">Crop Type (Enter 1, 2, etc.):</label>
+            <input type="number" id="cropType" name="crop_type" required>
+            
+            <label for="nitrogen">Nitrogen (N):</label>
+            <input type="number" id="nitrogen" name="nitrogen" required>
+
+            <label for="phosphorus">Phosphorus (P):</label>
+<input type="number" id="phosphorus" name="phosphorus" required>
+
+            <label for="potassium">Potassium (K):</label>
+            <input type="number" id="potassium" name="potassium" required>
+
+            <button type="button" onclick="recommendFertilizer()">Get Fertilizer Recommendation</button>
+        </form>
+    </section>
+
+    <script>
+        function recommendFertilizer() {
+            const form = document.getElementById('fertilizerForm');
+            const formData = new FormData(form);
+
+            fetch('http://127.0.0.1:5000/recommend-fertilizer', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const resultDiv = document.getElementById('fertilizerResult');
+               resultDiv.innerHTML = `
+            <div style="margin-top: 20px; padding: 15px; background-color: #e7ffe7; border: 1px solid #4caf50; border-radius: 5px;">
+                <h3 style="color: #4caf50;">Recommended Fertilizer:</h3>
+                <p style="font-size: 1.2em; font-weight: bold;">${data['Recommended Fertilizer']}</p>
+            </div>
+        `;
+
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while fetching the recommendation.');
+            });
+        }
+    </script>
+</body>
+</html>
